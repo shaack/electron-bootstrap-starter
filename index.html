@@ -2,16 +2,18 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hello Bootstrap World!</title>
+    <title>Hello Bootstrap!</title>
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Hello World!</h1>
-We are using node <script>document.write(process.versions.node)</script>,
-Chrome <script>document.write(process.versions.chrome)</script>,
-and Electron <script>document.write(process.versions.electron)</script>.
+<main class="container-fluid">
+    <h1>Hello Bootstrap!</h1>
+    We are using node <script>document.write(process.versions.node)</script>,
+    Chrome <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.
+</main>
 <script>
-    // load jQuery this way to get it working
+    // Load jQuery this way to get it working
     // see https://techsparx.com/nodejs/electron/load-jquery-bootstrap.html
     window.jQuery = window.$ = require('jquery');
 </script>
