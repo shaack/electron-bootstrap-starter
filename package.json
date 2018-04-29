@@ -1,0 +1,19 @@
+{
+  "name": "firstelectron",
+  "version": "1.0.0",
+  "description": "Electron with Bootstrap 4 Example",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "shaack",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^1.8.6"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
+  }
+}
