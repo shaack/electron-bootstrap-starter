@@ -1,5 +1,5 @@
 {
-  "name": "firstelectron",
+  "name": "electron-bootstrap-starter",
   "version": "1.0.0",
   "description": "Electron with Bootstrap 4 Example",
   "main": "main.js",
@@ -12,7 +12,7 @@
     "electron": "^1.8.6"
   },
   "dependencies": {
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3"
   }
