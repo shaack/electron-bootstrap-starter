@@ -1,6 +1,6 @@
 {
   "name": "electron-bootstrap-starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Electron with Bootstrap 4 Example",
   "main": "main.js",
   "scripts": {
