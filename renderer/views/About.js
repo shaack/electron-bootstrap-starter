@@ -7,11 +7,11 @@ module.exports = class About extends (require("./View")) {
         <h2>Features</h2>
         <ul>
         <li>Bootstrap 4</li>
-        <li>In Views separated pages</li>
-        <li>Simle reactive behaviour</li>
+        <li>In views separated pages</li>
+        <li>Simple reactive behaviour (without React, Angular etc.)</li>
         <li>Font-Awesome 5 integration</li>
-        <li>CRUD example with JSON storage</li>
-        <li>Example settings view</li>
+        <li>CRUD example with JSON storage (coming soon)</li>
+        <li>Example settings view (coming soon)</li>
         </ul>
         `
     }
