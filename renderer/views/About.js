@@ -2,7 +2,7 @@ module.exports = class About extends (require("./View")) {
     render() {
         return `
         <h1>electron-bootstrap-starter</h1>
-        <p>A starter project to create an electron app with Bootstrap.</p>
+        <p>A starter project to create an electron app with Bootstrap 4.</p>
         <p>License: MIT (c) 2018 <a target="_blank" href="https://shaack.com">shaack.com</a></p>
         <h2>Features</h2>
         <ul>
