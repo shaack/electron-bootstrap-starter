@@ -2,22 +2,54 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hello Bootstrap!</title>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Electron Bootstrap Starter</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome/styles.css"/>
+    <link rel="stylesheet" href="./assets/style/style.css"/>
 </head>
 <body>
+<nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
+    <span class="navbar-brand" href="#"><i class="fa fa-flag"></i>
+     </span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" data-view="crud">
+                <span class="nav-link">CRUD</span>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item" data-view="settings">
+                <span class="nav-link">Settings</span>
+            </li>
+            <li class="nav-item" data-view="about">
+                <span class="nav-link">About</span>
+            </li>
+        </ul>
+    </div>
+</nav>
 <main class="container-fluid">
-    <h1>Hello Bootstrap!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+
 </main>
 <script>
-    // Load jQuery this way to get it working
-    // see https://techsparx.com/nodejs/electron/load-jquery-bootstrap.html
     window.jQuery = window.$ = require('jquery');
 </script>
 <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
 <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="./node_modules/@fortawesome/fontawesome/index.js"></script>
+<script>
+    const {Renderer} = require("./renderer/Renderer")
+    const renderer = window.renderer = new Renderer({
+        // create instances of the views
+        crud: new (require("./renderer/views/Crud.js")),
+        settings: new (require("./renderer/views/Settings.js")),
+        about: new (require("./renderer/views/About.js"))
+    })
+    renderer.status.viewName = "about";
+
+</script>
 </body>
 </html>

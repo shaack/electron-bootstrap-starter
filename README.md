@@ -12,6 +12,6 @@ Clone sources and run
 
 ```npm install```
 
-## Start Electron
+## Crud Electron
 
 ```npm start```
