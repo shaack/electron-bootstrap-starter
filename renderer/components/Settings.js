@@ -8,8 +8,7 @@ module.exports = class Settings extends (require("../Component")) {
 
     constructor(renderer) {
         super(renderer)
-        // todo set default storge folder
-        Events.delegate(document.body, "click", "main.settings #exampleStorageFolder", () => {
+        Events.delegate(document.body, "click", "main.Settings #exampleStorageFolder", () => {
             console.log("open file Dialog");
         });
     }

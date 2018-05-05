@@ -10,9 +10,7 @@ exports.Renderer = class Renderer {
         this.initFontAwesome()
         // the status of the application
         this.status = {
-            activeComponentName: "", // used for navigation
-            dataStorageFolder: "",
-            exampleText: ""
+            activeComponentName: "" // used for navigation
         }
         this.loadComponents(components)
         Observe.property(this.status, "activeComponentName", (params) => {

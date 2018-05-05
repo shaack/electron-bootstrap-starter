@@ -9,11 +9,11 @@ running together.
 ### Features
 - Bootstrap 4
 - ES6
-- In views separated pages
+- Components architecture
 - Simple reactive behaviour (without React, Angular etc.)
+- Settings component with persistent storage
 - Font-Awesome 5 integration
 - CRUD example with JSON storage (coming soon)
-- Example settings view with persistent storage (coming soon)
 
 ## Installation
 

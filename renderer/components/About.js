@@ -7,7 +7,7 @@ module.exports = class About extends (require("../Component")) {
         <h2>Features</h2>
         <ul>
         <li>Bootstrap 4</li>
-        <li>In views separated pages</li>
+        <li>Component architecture</li>
         <li>Simple reactive behaviour (without React, Angular etc.)</li>
         <li>Font-Awesome 5 integration</li>
         <li>CRUD example with JSON storage (coming soon)</li>
