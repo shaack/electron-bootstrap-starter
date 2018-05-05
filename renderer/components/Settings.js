@@ -1,16 +1,22 @@
 const storage = require('electron-json-storage')
 const Events = require("../utils/Events")
+const Observe = require("../utils/Observe")
 const remote = require('electron').remote
 
-const fileName = "user.json"
 const settingsKey = "settings"
 module.exports = class Settings extends (require("../Component")) {
 
     constructor(renderer) {
         super(renderer)
-        Events.delegate(document.body, "click", "main.Settings #exampleStorageFolder", () => {
-            console.log("open file Dialog");
-        });
+        this.load(() => {
+            Events.delegate(document.body, "click", "main.Settings #exampleStorageFolder", () => {
+                console.log("open file Dialog")
+            })
+            Observe.property(this.renderer.status,
+                ["activeComponentName", "exampleText", "dataStorageFolder"], (params) => {
+                    this.save()
+                })
+        })
     }
 
     render() {
@@ -27,12 +33,10 @@ module.exports = class Settings extends (require("../Component")) {
             <input type="text" value="${renderer.status.exampleText}" class="form-control" id="exampleText" aria-describedby="exampleText" placeholder="Enter a text">
             <small class="form-text text-muted">This text will be displayed in the Text view</small>
           </div>
-        </form>`;
+        </form>`
     }
 
     onHide() {
-        console.log("onHide settings")
-        this.save();
     }
 
     load(callback) {
@@ -41,11 +45,11 @@ module.exports = class Settings extends (require("../Component")) {
             if (hasKey) {
                 storage.get(settingsKey, (error, data) => {
                     if (error) throw error
-                    Object.assign(this.renderer.status, data); // copy changed values
-                    callback(true);
+                    Object.assign(this.renderer.status, data) // copy changed values
+                    callback(true)
                 })
             } else {
-                callback(false);
+                callback(false)
             }
         })
     }

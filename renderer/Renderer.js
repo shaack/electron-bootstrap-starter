@@ -14,7 +14,6 @@ exports.Renderer = class Renderer {
         }
         this.loadComponents(components)
         Observe.property(this.status, "activeComponentName", (params) => {
-            console.log(params);
             if(params.oldValue !== params.newValue) {
                 const newNavItem = this.navElement.querySelector("[data-component='" + params.newValue + "']")
                 newNavItem.setAttribute("class", "nav-item active")
