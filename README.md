@@ -13,7 +13,7 @@ running together.
 - Simple reactive behaviour (without React, Angular etc.)
 - Font-Awesome 5 integration
 - CRUD example with JSON storage (coming soon)
-- Example settings view (coming soon)
+- Example settings view with persistent storage (coming soon)
 
 ## Installation
 

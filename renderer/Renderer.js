@@ -3,43 +3,54 @@ const Observe = require("./utils/Observe")
 
 exports.Renderer = class Renderer {
 
-    constructor(views) {
+    constructor(components) {
+        this.navElement = document.querySelector("nav")
+        this.mainElement = document.querySelector("main")
         this.delegateNavigation()
         this.initFontAwesome()
-        this.views = views
+        // the status of the application
         this.status = {
-            viewName: ""
+            activeComponentName: "", // used for navigation
+            dataStorageFolder: "",
+            exampleText: ""
         }
-        this.navElement = document.querySelector("nav");
-        this.mainElement = document.querySelector("main");
-        Observe.property(this.status, "viewName", (params) => {
+        this.loadComponents(components)
+        Observe.property(this.status, "activeComponentName", (params) => {
             // console.log(params);
             if(params.oldValue !== params.newValue) {
-                const newNavItem = this.navElement.querySelector("[data-view='" + params.newValue + "']")
+                const newNavItem = this.navElement.querySelector("[data-component='" + params.newValue + "']")
                 newNavItem.setAttribute("class", "nav-item active")
                 if(params.oldValue) {
-                    const oldNavItem = this.navElement.querySelector("[data-view='" + params.oldValue + "']")
+                    const oldNavItem = this.navElement.querySelector("[data-component='" + params.oldValue + "']")
                     oldNavItem.setAttribute("class", "nav-item")
                 }
-                this.getView().onShow(this.mainElement);
+                this.mainElement.setAttribute("class", "container-fluid " + this.status.activeComponentName)
+                this.getComponent().onShow()
             }
         })
     }
 
-    getView() {
-        if(this.status.viewName) {
-            return this.views[this.status.viewName];
+    loadComponents(components) {
+        this.components = {};
+        for (const componentName of components) {
+            const componentClass = require("./components/" + componentName + ".js")
+            this.components[componentName] = new componentClass(this);
+        }
+    }
+
+    getComponent() {
+        if(this.status.activeComponentName) {
+            return this.components[this.status.activeComponentName]
         }
     }
 
     delegateNavigation() {
-        this.main = document.querySelector("main")
         // Dispatch navigation clicks, render view
         Events.delegate(document.querySelector("nav"), "click", ".nav-item", (event) => {
             let parentNode = event.target.parentNode
-            this.status.viewName = parentNode.getAttribute("data-view")
-            if(!this.views[this.status.viewName]) {
-                console.error("unknown view", this.status.view)
+            this.status.activeComponentName = parentNode.getAttribute("data-component")
+            if(!this.components[this.status.activeComponentName]) {
+                console.error("unknown component", this.status.view)
             }
         })
     }

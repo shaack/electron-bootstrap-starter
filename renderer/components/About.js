@@ -1,4 +1,4 @@
-module.exports = class About extends (require("./View")) {
+module.exports = class About extends (require("../Component")) {
     render() {
         return `
         <h1>electron-bootstrap-starter</h1>

@@ -1,4 +1,4 @@
-module.exports = class Crud extends (require("./View")) {
+module.exports = class Crud extends (require("../Component")) {
     render() {
         return `CRUD example coming soon`;
     }

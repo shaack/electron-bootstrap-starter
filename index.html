@@ -17,15 +17,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" data-view="crud">
+            <li class="nav-item" data-component="Crud">
                 <span class="nav-link">CRUD</span>
+            </li>
+            <li class="nav-item" data-component="Text">
+                <span class="nav-link">Text</span>
             </li>
         </ul>
         <ul class="navbar-nav">
-            <li class="nav-item" data-view="settings">
+            <li class="nav-item" data-component="Settings">
                 <span class="nav-link">Settings</span>
             </li>
-            <li class="nav-item" data-view="about">
+            <li class="nav-item" data-component="About">
                 <span class="nav-link">About</span>
             </li>
         </ul>
@@ -42,14 +45,10 @@
 <script src="./node_modules/@fortawesome/fontawesome/index.js"></script>
 <script>
     const {Renderer} = require("./renderer/Renderer")
-    const renderer = window.renderer = new Renderer({
-        // create instances of the views
-        crud: new (require("./renderer/views/Crud.js")),
-        settings: new (require("./renderer/views/Settings.js")),
-        about: new (require("./renderer/views/About.js"))
-    })
-    renderer.status.viewName = "about";
-
+    const renderer = window.renderer = new Renderer([
+        "Crud", "Text", "Settings", "About" // components
+    ])
+    renderer.status.activeComponentName = "Settings";
 </script>
 </body>
 </html>
