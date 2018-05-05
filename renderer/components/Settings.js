@@ -31,6 +31,7 @@ module.exports = class Settings extends (require("../Component")) {
     }
 
     onHide() {
+        console.log("onHide settings")
         this.save();
     }
 

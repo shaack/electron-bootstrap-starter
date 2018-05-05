@@ -10,17 +10,18 @@ exports.Renderer = class Renderer {
         this.initFontAwesome()
         // the status of the application
         this.status = {
-            activeComponentName: "" // used for navigation
+            activeComponentName: "" // the active shown component
         }
         this.loadComponents(components)
         Observe.property(this.status, "activeComponentName", (params) => {
-            // console.log(params);
+            console.log(params);
             if(params.oldValue !== params.newValue) {
                 const newNavItem = this.navElement.querySelector("[data-component='" + params.newValue + "']")
                 newNavItem.setAttribute("class", "nav-item active")
                 if(params.oldValue) {
                     const oldNavItem = this.navElement.querySelector("[data-component='" + params.oldValue + "']")
                     oldNavItem.setAttribute("class", "nav-item")
+                    this.components[params.oldValue].onHide();
                 }
                 this.mainElement.setAttribute("class", "container-fluid " + this.status.activeComponentName)
                 this.getComponent().onShow()
