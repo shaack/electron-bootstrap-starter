@@ -1,5 +1,7 @@
 const Events = require("./utils/Events")
 const Observe = require("./utils/Observe")
+const storage = require("electron-json-storage")
+const path = require("path")
 
 exports.Renderer = class Renderer {
 
@@ -12,32 +14,42 @@ exports.Renderer = class Renderer {
         this.status = {
             activeComponentName: "" // the active shown component
         }
+        this.settings = {
+            dataStorageFolder: storage.getDefaultDataPath() + path.sep + "data",
+            exampleText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+        }
         this.loadComponents(components)
         Observe.property(this.status, "activeComponentName", (params) => {
-            if(params.oldValue !== params.newValue) {
+            if (params.oldValue !== params.newValue) {
                 const newNavItem = this.navElement.querySelector("[data-component='" + params.newValue + "']")
                 newNavItem.setAttribute("class", "nav-item active")
-                if(params.oldValue) {
+                if (params.oldValue) {
                     const oldNavItem = this.navElement.querySelector("[data-component='" + params.oldValue + "']")
                     oldNavItem.setAttribute("class", "nav-item")
-                    this.components[params.oldValue].onHide();
+                    this.components[params.oldValue].onHide()
                 }
                 this.mainElement.setAttribute("class", "container-fluid " + this.status.activeComponentName)
                 this.getComponent().onShow()
             }
+            localStorage.setItem("activeComponentName", this.status.activeComponentName)
         })
+        if(localStorage.getItem("activeComponentName")) {
+            this.status.activeComponentName = localStorage.getItem("activeComponentName")
+        } else {
+            this.status.activeComponentName = "About"
+        }
     }
 
     loadComponents(components) {
-        this.components = {};
+        this.components = {}
         for (const componentName of components) {
             const componentClass = require("./components/" + componentName + ".js")
-            this.components[componentName] = new componentClass(this);
+            this.components[componentName] = new componentClass(this)
         }
     }
 
     getComponent() {
-        if(this.status.activeComponentName) {
+        if (this.status.activeComponentName) {
             return this.components[this.status.activeComponentName]
         }
     }
@@ -47,7 +59,7 @@ exports.Renderer = class Renderer {
         Events.delegate(document.querySelector("nav"), "click", ".nav-item", (event) => {
             let parentNode = event.target.parentNode
             this.status.activeComponentName = parentNode.getAttribute("data-component")
-            if(!this.components[this.status.activeComponentName]) {
+            if (!this.components[this.status.activeComponentName]) {
                 console.error("unknown component", this.status.view)
             }
         })
