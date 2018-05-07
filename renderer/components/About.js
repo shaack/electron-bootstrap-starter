@@ -3,7 +3,7 @@ module.exports = class About extends (require("../Component")) {
         return `
         <h1>electron-bootstrap-starter</h1>
         <p>A starter project to create an electron app with Bootstrap 4.</p>
-        <p>License: MIT (c) 2018 <a target="_blank" href="https://shaack.com">shaack.com</a></p>
+        <p><b>License:</b> MIT; &copy; 2018 <a target="_blank" href="https://shaack.com">shaack.com</a>, all rights reserved</p>
         <h2>Features</h2>
         <ul>
         <li>Bootstrap 4</li>
