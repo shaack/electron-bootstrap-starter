@@ -1,6 +1,6 @@
 /* line 1, style.scss */
 main {
-  padding-top: 65px; }
+  padding-top: 68px; }
 
 /* line 5, style.scss */
 .nav-item {
@@ -9,5 +9,9 @@ main {
 /* line 9, style.scss */
 .navbar-brand {
   cursor: default; }
+
+/* line 13, style.scss */
+table.crud {
+  width: 100%; }
 
 /*# sourceMappingURL=style.css.map */
