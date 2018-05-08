@@ -1,7 +1,3 @@
-/**
- * Author: Stefan Haack https://shaack.com
- * License: MIT, (c) 2018 all rights reserved
- */
 const Events = require("./utils/Events")
 const Observe = require("./utils/Observe")
 const storage = require("electron-json-storage")

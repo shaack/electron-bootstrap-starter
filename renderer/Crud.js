@@ -5,10 +5,6 @@ const storage = require('electron-json-storage')
 const path = require('path')
 const BootstrapModal = require("./BootstrapModal")
 
-/**
- * Author: Stefan Haack https://shaack.com
- * License: MIT, (c) 2018 all rights reserved
- */
 class EditDialog extends BootstrapModal {
 
     constructor(config, componentName) {
@@ -49,8 +45,14 @@ class EditDialog extends BootstrapModal {
         return values
     }
 
-    show(fields, data = {}) {
+    show(fields, id = null) {
         let fieldsHTML = ""
+        let data = null;
+        if(id) {
+            storage.get(this.componentName, (allData) => {
+                if(allData) data = allData[id]
+            })
+        }
         this.fields = fields
         for (const field in fields) {
             const fieldType = fields[field]
@@ -60,6 +62,7 @@ class EditDialog extends BootstrapModal {
         }
         let buttonsHTML = ""
         if (data.id) {
+            buttonsHTML += `<input type="hidden" id="id" value="${data.id}"/>`;
             buttonsHTML += `<button class="btn-light btn btn-delete"><i class="fa fa-trash"></i> Delete</button>`
         }
         buttonsHTML += `<button class="btn-primary btn btn-save">Save</button>`
@@ -69,23 +72,23 @@ class EditDialog extends BootstrapModal {
         })
     }
 
-    renderFormGroup(id, name, type, value) {
+    renderFormGroup(htmlId, name, type, value) {
         let inputHtml = ""
         switch (type) {
             case "Text":
-                inputHtml = `<input id="${id}" type="text" class="form-control" value="${value}"/>`
+                inputHtml = `<input id="${htmlId}" type="text" class="form-control" value="${value}"/>`
                 break
             case "Integer":
-                inputHtml = `<input id="${id}" type="number" class="form-control" value="${value}"/>`
+                inputHtml = `<input id="${htmlId}" type="number" class="form-control" value="${value}"/>`
                 break
             case "Currency":
-                inputHtml = `<input id="${id}" type="number" data-decimals="2" class="form-control" value="${value}" step="0.01"/>`
+                inputHtml = `<input id="${htmlId}" type="number" data-decimals="2" class="form-control" value="${value}" step="0.01"/>`
                 break
             default:
                 console.error(`unknown field type: ${type}`)
         }
         return `<div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="${id}">${name}</label>
+                    <label class="col-sm-4 col-form-label" for="${htmlId}">${name}</label>
                     <div class="col-sm-8">
                         ${inputHtml}
                     </div>
@@ -108,12 +111,8 @@ module.exports = class Crud extends (require("./Component")) {
         })
     }
 
-    showDetails(key) {
-        storage.get(this.componentName, (data) => {
-            if (!data) data = {}
-            this.editDialog.show(this.config.fields, data)
-        })
-
+    showDetails(id = null) {
+        this.editDialog.show(this.config.fields, id)
     }
 
     getConfig() {
