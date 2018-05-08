@@ -1,8 +1,17 @@
-// Parent "abstract" class, extended in component implementations
+/**
+ * Author: Stefan Haack https://shaack.com
+ * License: MIT, (c) 2018 all rights reserved
+ */
 module.exports = class Component {
 
-    constructor(renderer) {
+    constructor(componentName, renderer) {
+        this.componentName = componentName
         this.renderer = renderer
+        this.config = this.getConfig()
+    }
+
+    getConfig() {
+        return {} // implment in subclass
     }
 
     onShow() {
@@ -11,6 +20,10 @@ module.exports = class Component {
 
     onHide() {
 
+    }
+
+    isActive() {
+        return this === this.renderer.components[this.renderer.status.activeComponentName]
     }
 
     render() {

@@ -1,12 +1,10 @@
-const storage = require('electron-json-storage')
 const Events = require("../utils/Events")
-
 
 const settingsKey = "settings"
 module.exports = class Settings extends (require("../Component")) {
 
-    constructor(renderer) {
-        super(renderer)
+    constructor(componentName, renderer) {
+        super(componentName, renderer)
 
         if (!this.load()) {
             this.save()
@@ -26,7 +24,6 @@ module.exports = class Settings extends (require("../Component")) {
     }
 
     render() {
-        console.log("render settings")
         return `
         <h1>Settings</h1>
         <form id="settingsForm">

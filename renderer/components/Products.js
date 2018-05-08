@@ -1,7 +1,8 @@
 module.exports = class Products extends (require("../Crud")) {
+
     getConfig() {
         return {
-            model: {
+            fields: {
                 "Product Name": "Text",
                 "Description": "Text",
                 "Quantity": "Integer",

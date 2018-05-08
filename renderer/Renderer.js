@@ -1,3 +1,7 @@
+/**
+ * Author: Stefan Haack https://shaack.com
+ * License: MIT, (c) 2018 all rights reserved
+ */
 const Events = require("./utils/Events")
 const Observe = require("./utils/Observe")
 const storage = require("electron-json-storage")
@@ -44,7 +48,7 @@ exports.Renderer = class Renderer {
         this.components = {}
         for (const componentName of components) {
             const componentClass = require("./components/" + componentName + ".js")
-            this.components[componentName] = new componentClass(this)
+            this.components[componentName] = new componentClass(componentName, this)
         }
     }
 
@@ -65,10 +69,15 @@ exports.Renderer = class Renderer {
         })
     }
 
+    redrawActiveComponent() {
+
+    }
+
     initFontAwesome() {
         this.fontawesome = require('@fortawesome/fontawesome')
         this.fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faFlag'))
         this.fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faPlus'))
+        this.fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faTrash'))
     }
 
 }
