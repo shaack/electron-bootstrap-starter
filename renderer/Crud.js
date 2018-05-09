@@ -47,7 +47,7 @@ class EditDialog extends BootstrapModal {
 
     show(fields, id = null) {
         let fieldsHTML = ""
-        let data = null;
+        let data = {};
         if(id) {
             storage.get(this.componentName, (allData) => {
                 if(allData) data = allData[id]
@@ -132,7 +132,21 @@ module.exports = class Crud extends (require("./Component")) {
         for (const listColumnField of this.config.list) {
             theadContent += `<th>${listColumnField}</th>`
         }
-        return `<table class="crud"><thead><tr>${theadContent}</tr></thead></table>`
+        storage.get(this.componentName, (error, data) => {
+            console.log(data)
+            const tbody = document.body.querySelector("main." + this.componentName + " tbody")
+            let tbodyHtml = "";
+            for (const rowId in data) {
+                const row = data[rowId]
+                let rowHTML = "";
+                for (const listColumnField of this.config.list) {
+                    rowHTML += "<td>" + row[listColumnField] + "</td>"
+                }
+                tbodyHtml += `<tr>${rowHTML}</tr>`;
+            }
+            tbody.innerHTML = tbodyHtml;
+        });
+        return `<table class="crud"><thead><tr>${theadContent}</tr></thead><tbody></tbody></table>`
     }
 
 }
