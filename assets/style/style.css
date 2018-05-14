@@ -13,5 +13,30 @@ main {
 /* line 13, style.scss */
 table.crud {
   width: 100%; }
+  /* line 16, style.scss */
+  table.crud th[role=columnheader]:not(.no-sort) {
+    cursor: pointer;
+    -webkit-user-select: none; }
+  /* line 21, style.scss */
+  table.crud th[role=columnheader]:not(.no-sort):after {
+    content: '';
+    float: right;
+    margin-top: 8px;
+    border-width: 0 8px 8px;
+    border-style: solid;
+    border-color: #404040 transparent;
+    visibility: hidden;
+    opacity: 0; }
+  /* line 32, style.scss */
+  table.crud th[aria-sort=ascending]:not(.no-sort):after {
+    border-bottom: none;
+    border-width: 8px 8px 0; }
+  /* line 37, style.scss */
+  table.crud th[aria-sort]:not(.no-sort):after {
+    visibility: visible;
+    opacity: 1; }
+  /* line 42, style.scss */
+  table.crud th, table.crud td {
+    padding-right: 10px; }
 
 /*# sourceMappingURL=style.css.map */

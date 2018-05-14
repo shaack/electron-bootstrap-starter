@@ -65,10 +65,6 @@ exports.Renderer = class Renderer {
         })
     }
 
-    redrawActiveComponent() {
-
-    }
-
     initFontAwesome() {
         this.fontawesome = require('@fortawesome/fontawesome')
         this.fontawesome.library.add(require('@fortawesome/fontawesome-free-solid/faFlag'))

@@ -4,10 +4,11 @@ const Crypto = require("./utils/Crypto")
 const storage = require('electron-json-storage')
 const path = require('path')
 const BootstrapModal = require("./BootstrapModal")
+const tablesort = require('tablesort');
 
 class EditDialog extends BootstrapModal {
 
-    constructor(config, componentName) {
+    constructor(config, componentName, renderer) {
         super(config)
         this.componentName = componentName
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-delete", (event) => {
@@ -31,6 +32,7 @@ class EditDialog extends BootstrapModal {
                 storage.set(this.componentName, data, (error) => {
                     if (error) throw error
                     console.log("hide")
+                    renderer.getComponent().redraw()
                     this.hide()
                 })
             })
@@ -103,7 +105,7 @@ module.exports = class Crud extends (require("./Component")) {
         super(componentName, renderer)
         this.editDialog = new EditDialog({
             dialogCss: "dialog" + componentName
-        }, componentName)
+        }, componentName, renderer)
         Events.delegate(document.body, "click", "main .btn-add", () => {
             if (this.isActive()) {
                 this.showDetails()
@@ -121,6 +123,12 @@ module.exports = class Crud extends (require("./Component")) {
 
     render() {
         return "<h1>Products</h1>" + this.renderToolbar() + this.renderTable()
+    }
+
+    redraw() {
+        super.redraw();
+        const table = document.body.querySelector("main." + this.componentName + " table")
+        tablesort(table, {});
     }
 
     renderToolbar() {

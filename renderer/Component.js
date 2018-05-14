@@ -11,7 +11,7 @@ module.exports = class Component {
     }
 
     onShow() {
-        this.renderer.mainElement.innerHTML = this.render()
+        this.redraw()
     }
 
     onHide() {
@@ -20,6 +20,10 @@ module.exports = class Component {
 
     isActive() {
         return this === this.renderer.components[this.renderer.status.activeComponentName]
+    }
+
+    redraw() {
+        this.renderer.mainElement.innerHTML = this.render()
     }
 
     render() {
