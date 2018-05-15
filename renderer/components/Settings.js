@@ -1,4 +1,5 @@
 const Events = require("../utils/Events")
+const {dialog} = require('electron').remote
 
 const settingsKey = "settings"
 module.exports = class Settings extends (require("../Component")) {
@@ -10,7 +11,12 @@ module.exports = class Settings extends (require("../Component")) {
             this.save()
         }
         Events.delegate(document.body, "click", "#settingsForm #exampleStorageFolder", () => {
-            console.log("open file Dialog")
+            const value = this.renderer.settings.dataStorageFolder
+            const newValue = dialog.showOpenDialog({defaultPath: value, properties: ['openDirectory', 'createDirectory']})[0]
+            if(newValue && newValue !== value) {
+                document.getElementById("exampleStorageFolder").value = newValue
+                document.getElementById("settingsSubmitButton").disabled = false
+            }
         })
         Events.delegate(document.body, "input", "#settingsForm input", () => {
             document.getElementById("settingsSubmitButton").disabled = false

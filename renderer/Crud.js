@@ -145,12 +145,13 @@ module.exports = class Crud extends (require("./Component")) {
         console.error("implement in child class")
     }
 
-    render() {
-        return "<h1>Products</h1>" + this.renderToolbar() + this.renderTable()
+    onShow() {
+        storage.setDataPath(this.renderer.settings.dataStorageFolder)
+        super.onShow();
     }
 
-    redraw() {
-        super.redraw()
+    render() {
+        return "<h1>Products</h1>" + this.renderToolbar() + this.renderTable()
     }
 
     renderToolbar() {

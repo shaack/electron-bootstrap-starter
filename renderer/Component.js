@@ -7,7 +7,7 @@ module.exports = class Component {
     }
 
     getConfig() {
-        return {} // implment in subclass
+        return {} // implement in subclass
     }
 
     onShow() {

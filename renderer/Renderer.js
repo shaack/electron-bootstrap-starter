@@ -15,7 +15,7 @@ exports.Renderer = class Renderer {
             activeComponentName: "" // the active shown component
         }
         this.settings = {
-            dataStorageFolder: storage.getDefaultDataPath() + path.sep + "data",
+            dataStorageFolder: storage.getDefaultDataPath(),
             exampleText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
         }
         this.loadComponents(components)
