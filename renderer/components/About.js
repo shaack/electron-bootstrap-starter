@@ -10,8 +10,8 @@ module.exports = class About extends (require("../Component")) {
         <li>Component architecture</li>
         <li>Simple reactive behaviour (without React, Angular etc.)</li>
         <li>Font-Awesome 5 integration</li>
-        <li>CRUD example with JSON storage (coming soon)</li>
-        <li>Example settings view (coming soon)</li>
+        <li>CRUD example with JSON storage in file</li>
+        <li>Settings component with persistent storage</li>
         </ul>
         `
     }

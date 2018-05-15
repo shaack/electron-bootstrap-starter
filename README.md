@@ -11,9 +11,9 @@ running together.
 - ES6
 - Components architecture
 - Simple reactive behaviour (without React, Angular etc.)
-- Settings component with persistent storage
 - Font-Awesome 5 integration
-- CRUD example with JSON storage (coming soon)
+- CRUD example with JSON storage in file
+- Settings component with persistent storage
 
 ## Installation
 
