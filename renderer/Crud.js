@@ -75,10 +75,9 @@ class EditDialog extends BootstrapModal {
         let fieldsHTML = ""
         this.fields = fields
         for (const field in fields) {
-            const fieldType = fields[field]
-            const fieldId = Html.toId("input_" + field)
+            const fieldConfig = fields[field]
             const fieldData = data[field] || ""
-            fieldsHTML += this.renderFormGroup(fieldId, field, fieldType, fieldData)
+            fieldsHTML += this.renderFormGroup(field, fieldConfig, fieldData)
         }
         let buttonsHTML = ""
         if (data.id) {
@@ -92,27 +91,43 @@ class EditDialog extends BootstrapModal {
         })
     }
 
-    renderFormGroup(htmlId, name, type, value) {
+    renderFormGroup(name, fieldConfig, value) {
         let inputHtml = ""
-        switch (type) {
-            case "Text":
-                inputHtml = `<input id="${htmlId}" type="text" class="form-control" value="${value}"/>`
+        const fieldId = Html.toId("input_" + name)
+        switch (fieldConfig.type) {
+            case "text":
+                inputHtml = `<input id="${fieldId}" type="text" class="form-control" value="${value}"/>`
                 break
-            case "Integer":
-                inputHtml = `<input id="${htmlId}" type="number" class="form-control" value="${value}"/>`
+            case "integer":
+                inputHtml = `<input id="${fieldId}" type="number" class="form-control" value="${value}"/>`
                 break
-            case "Currency":
-                inputHtml = `<input id="${htmlId}" type="number" data-decimals="2" class="form-control" value="${value}" step="0.01"/>`
+            case "currency":
+                inputHtml = `<input id="${fieldId}" type="number" data-decimals="2" class="form-control" value="${value}" step="0.01"/>`
+                break
+            case "select":
+                inputHtml = `<select id="${fieldId}" class="form-control">${this.renderSelectOptions(fieldConfig.options, value)}</select>`
                 break
             default:
-                console.error(`unknown field type: ${type}`)
+                console.error(`unknown field type: ${fieldConfig.type}`)
         }
         return `<div class="form-group row">
-                    <label class="col-sm-4 col-form-label" for="${htmlId}">${name}</label>
+                    <label class="col-sm-4 col-form-label" for="${fieldId}">${fieldConfig.label}</label>
                     <div class="col-sm-8">
                         ${inputHtml}
                     </div>
                   </div>`
+    }
+
+    renderSelectOptions(options, value) {
+        console.log(options, value)
+        let optionsHtml = "<option value=''></option>"
+        let i=1;
+        for (const option of options) {
+            const selected = (parseInt(value, 10) === i) ? "selected" : ""
+            optionsHtml += `<option value="${i}" ${selected}>${option}</option>`
+            i++
+        }
+        return optionsHtml
     }
 
 }
@@ -121,6 +136,8 @@ module.exports = class Crud extends (require("./Component")) {
 
     constructor(componentName, renderer) {
         super(componentName, renderer)
+        this.currencyFormat = new Intl.NumberFormat(renderer.locale, {minimumFractionDigits: 2})
+        this.intFormat = new Intl.NumberFormat(renderer.locale)
         this.editDialog = new EditDialog({
             dialogCss: "dialog" + componentName
         }, componentName, renderer)
@@ -162,9 +179,9 @@ module.exports = class Crud extends (require("./Component")) {
         let theadContent = ""
         for (const listColumnField of this.config.list) {
             if (this.config.sort === listColumnField) {
-                theadContent += `<th data-sort-default="">${listColumnField}</th>`
+                theadContent += `<th data-sort-default="" class="${this.config.fields[listColumnField].type}">${this.config.fields[listColumnField].label}</th>`
             } else {
-                theadContent += `<th>${listColumnField}</th>`
+                theadContent += `<th class="${this.config.fields[listColumnField].type}">${this.config.fields[listColumnField].label}</th>`
             }
         }
         storage.get(this.componentName, (error, data) => {
@@ -175,7 +192,21 @@ module.exports = class Crud extends (require("./Component")) {
                 const row = data[rowId]
                 let rowHTML = ""
                 for (const listColumnField of this.config.list) {
-                    rowHTML += "<td>" + row[listColumnField] + "</td>"
+                    const fieldConfig = this.config.fields[listColumnField]
+                    switch(fieldConfig.type) {
+                        case "currency":
+                            rowHTML += "<td class='currency'>" + this.currencyFormat.format(row[listColumnField]) + "</td>"
+                            break
+                        case "integer":
+                            rowHTML += "<td class='integer'>" + this.intFormat.format(row[listColumnField]) + "</td>"
+                            break
+                        case "select":
+                            rowHTML += "<td class='select'>" + fieldConfig.options[row[listColumnField] - 1] + "</td>"
+                            break
+                        default:
+                            rowHTML += "<td>" + row[listColumnField] + "</td>"
+                    }
+
                 }
                 tbodyHtml += `<tr class="table-row" data-id="${rowId}">${rowHTML}</tr>`
             }

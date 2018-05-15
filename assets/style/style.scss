@@ -47,6 +47,20 @@ table.crud {
   }
 
   th, td {
-    padding-right: 10px;
+    padding: 2px 10px 2px 10px;
+    border: 1px solid #999;
   }
+
+  td {
+    &.currency, &.integer {
+      text-align: right;
+    }
+  }
+  /*
+  th {
+    &.currency, &.integer {
+      text-align: center;
+    }
+  }
+  */
 }

@@ -10,6 +10,7 @@ exports.Renderer = class Renderer {
         this.mainElement = document.querySelector("main")
         this.delegateNavigation()
         this.initFontAwesome()
+        this.locale = navigator.language || "en-US"
         // the status of the application
         this.status = {
             activeComponentName: "" // the active shown component

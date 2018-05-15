@@ -2,14 +2,15 @@ module.exports = class Products extends (require("../Crud")) {
 
     getConfig() {
         return {
-            sort: "Product Name",
+            sort: "name",
             fields: {
-                "Product Name": "Text",
-                "Description": "Text",
-                "Quantity": "Integer",
-                "Price": "Currency"
+                "name": {label: "Product Name", type: "text"},
+                "vat": {label: "Vat", type: "select", options: ["7%", "19%"]},
+                "quantity": {label: "Quantity", type: "integer"},
+                "price_gross": {label: "Price (gross)", type: "currency"},
+                "price_net": {label: "Price (net)", type: "currency"}
             },
-            list: ["Product Name", "Description", "Quantity", "Price"]
+            list: ["name", "quantity", "vat", "price_gross", "price_net"]
         }
     }
 }
