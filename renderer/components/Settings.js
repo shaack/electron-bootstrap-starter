@@ -6,15 +6,14 @@ module.exports = class Settings extends (require("../Component")) {
 
     constructor(componentName, renderer) {
         super(componentName, renderer)
-
         if (!this.load()) {
             this.save()
         }
-        Events.delegate(document.body, "click", "#settingsForm #exampleStorageFolder", () => {
+        Events.delegate(document.body, "click", "#settingsForm #storageFolder", () => {
             const value = this.renderer.settings.dataStorageFolder
             const newValue = dialog.showOpenDialog({defaultPath: value, properties: ['openDirectory', 'createDirectory']})[0]
             if(newValue && newValue !== value) {
-                document.getElementById("exampleStorageFolder").value = newValue
+                document.getElementById("storageFolder").value = newValue
                 document.getElementById("settingsSubmitButton").disabled = false
             }
         })
@@ -34,8 +33,8 @@ module.exports = class Settings extends (require("../Component")) {
         <h1>Settings</h1>
         <form id="settingsForm">
           <div class="form-group">
-            <label for="exampleStorageFolder">Data Storage Folder</label>
-            <input readonly value="${this.renderer.settings.dataStorageFolder}" type="text" class="form-control" id="exampleStorageFolder">
+            <label for="storageFolder">Data Storage Folder</label>
+            <input readonly value="${this.renderer.settings.dataStorageFolder}" type="text" class="form-control" id="storageFolder">
             <small class="form-text text-muted">The storage folder used for the CRUD example</small>
           </div>
           <div class="form-group">
@@ -47,11 +46,8 @@ module.exports = class Settings extends (require("../Component")) {
         </form>`
     }
 
-    onHide() {
-    }
-
     transferFormData() {
-        this.renderer.settings.dataStorageFolder = document.getElementById("exampleStorageFolder").value
+        this.renderer.settings.dataStorageFolder = document.getElementById("storageFolder").value
         this.renderer.settings.exampleText = document.getElementById("exampleText").value
 
     }

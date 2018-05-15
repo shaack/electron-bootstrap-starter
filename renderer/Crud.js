@@ -1,10 +1,10 @@
 const Events = require("./utils/Events")
 const Html = require("./utils/Html")
 const Crypto = require("./utils/Crypto")
-const storage = require('electron-json-storage')
-const path = require('path')
+const storage = require("electron-json-storage")
+const path = require("path")
 const BootstrapModal = require("./BootstrapModal")
-const tablesort = require('tablesort')
+const tablesort = require("tablesort")
 
 class EditDialog extends BootstrapModal {
 
@@ -16,7 +16,7 @@ class EditDialog extends BootstrapModal {
             let values = this.readFormValues()
             storage.get(this.componentName, (error, data) => {
                 if (error) throw error
-                if(confirm("Delete?")) {
+                if (confirm("Delete?")) {
                     delete data[values.id]
                     storage.set(this.componentName, data, (error) => {
                         if (error) throw error
@@ -52,7 +52,7 @@ class EditDialog extends BootstrapModal {
         for (const field in this.fields) {
             values[field] = document.getElementById(Html.toId("input_" + field)).value
         }
-        if(document.getElementById("input_id")) {
+        if (document.getElementById("input_id")) {
             values["id"] = document.getElementById("input_id").value
         }
         return values
@@ -147,7 +147,7 @@ module.exports = class Crud extends (require("./Component")) {
 
     onShow() {
         storage.setDataPath(this.renderer.settings.dataStorageFolder)
-        super.onShow();
+        super.onShow()
     }
 
     render() {
