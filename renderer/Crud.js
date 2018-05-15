@@ -4,7 +4,7 @@ const Crypto = require("./utils/Crypto")
 const storage = require('electron-json-storage')
 const path = require('path')
 const BootstrapModal = require("./BootstrapModal")
-const tablesort = require('tablesort');
+const tablesort = require('tablesort')
 
 class EditDialog extends BootstrapModal {
 
@@ -13,7 +13,16 @@ class EditDialog extends BootstrapModal {
         this.componentName = componentName
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-delete", (event) => {
             event.preventDefault()
-            console.log("delete")
+            let values = this.readFormValues()
+            storage.get(this.componentName, (error, data) => {
+                if (error) throw error
+                delete data[values.id]
+                storage.set(this.componentName, data, (error) => {
+                    if (error) throw error
+                    renderer.getComponent().redraw()
+                    this.hide()
+                })
+            })
         })
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-save", (event) => {
             event.preventDefault()
@@ -23,15 +32,12 @@ class EditDialog extends BootstrapModal {
             }
             storage.get(this.componentName, (error, data) => {
                 if (error) throw error
-                console.log("data", data)
                 if (!data) {
                     data = {}
                 }
                 data[values.id] = values
-                console.log("data", data)
                 storage.set(this.componentName, data, (error) => {
                     if (error) throw error
-                    console.log("hide")
                     renderer.getComponent().redraw()
                     this.hide()
                 })
@@ -44,17 +50,27 @@ class EditDialog extends BootstrapModal {
         for (const field in this.fields) {
             values[field] = document.getElementById(Html.toId("input_" + field)).value
         }
+        if(document.getElementById("input_id")) {
+            values["id"] = document.getElementById("input_id").value
+        }
         return values
     }
 
     show(fields, id = null) {
-        let fieldsHTML = ""
-        let data = {};
-        if(id) {
-            storage.get(this.componentName, (allData) => {
-                if(allData) data = allData[id]
+        let data = {}
+        if (id) {
+            storage.get(this.componentName, (error, allData) => {
+                if (error) throw error
+                if (allData) data = allData[id]
+                this.renderForm(fields, data)
             })
+        } else {
+            this.renderForm(fields, data)
         }
+    }
+
+    renderForm(fields, data) {
+        let fieldsHTML = ""
         this.fields = fields
         for (const field in fields) {
             const fieldType = fields[field]
@@ -64,7 +80,7 @@ class EditDialog extends BootstrapModal {
         }
         let buttonsHTML = ""
         if (data.id) {
-            buttonsHTML += `<input type="hidden" id="id" value="${data.id}"/>`;
+            buttonsHTML += `<input type="hidden" id="input_id" value="${data.id}"/>`
             buttonsHTML += `<button class="btn-light btn btn-delete"><i class="fa fa-trash"></i> Delete</button>`
         }
         buttonsHTML += `<button class="btn-primary btn btn-save">Save</button>`
@@ -111,6 +127,12 @@ module.exports = class Crud extends (require("./Component")) {
                 this.showDetails()
             }
         })
+        Events.delegate(document.body, "click", "main table.crud tr.table-row", (event) => {
+            const id = event.target.parentNode.getAttribute("data-id")
+            if (id) {
+                this.showDetails(id)
+            }
+        })
     }
 
     showDetails(id = null) {
@@ -126,9 +148,7 @@ module.exports = class Crud extends (require("./Component")) {
     }
 
     redraw() {
-        super.redraw();
-        const table = document.body.querySelector("main." + this.componentName + " table")
-        tablesort(table, {});
+        super.redraw()
     }
 
     renderToolbar() {
@@ -138,22 +158,28 @@ module.exports = class Crud extends (require("./Component")) {
     renderTable() {
         let theadContent = ""
         for (const listColumnField of this.config.list) {
-            theadContent += `<th>${listColumnField}</th>`
+            if (this.config.sort === listColumnField) {
+                theadContent += `<th data-sort-default="">${listColumnField}</th>`
+            } else {
+                theadContent += `<th>${listColumnField}</th>`
+            }
         }
         storage.get(this.componentName, (error, data) => {
-            console.log(data)
+            if (error) throw error
             const tbody = document.body.querySelector("main." + this.componentName + " tbody")
-            let tbodyHtml = "";
+            let tbodyHtml = ""
             for (const rowId in data) {
                 const row = data[rowId]
-                let rowHTML = "";
+                let rowHTML = ""
                 for (const listColumnField of this.config.list) {
                     rowHTML += "<td>" + row[listColumnField] + "</td>"
                 }
-                tbodyHtml += `<tr>${rowHTML}</tr>`;
+                tbodyHtml += `<tr class="table-row" data-id="${rowId}">${rowHTML}</tr>`
             }
-            tbody.innerHTML = tbodyHtml;
-        });
+            tbody.innerHTML = tbodyHtml
+            const table = document.body.querySelector("main." + this.componentName + " table")
+            this.tablesort = tablesort(table)
+        })
         return `<table class="crud"><thead><tr>${theadContent}</tr></thead><tbody></tbody></table>`
     }
 

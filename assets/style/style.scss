@@ -13,6 +13,13 @@ main {
 table.crud {
   width: 100%;
 
+  tr.table-row {
+    cursor: pointer;
+    &:hover {
+      background-color: #eaeef2;
+    }
+  }
+
   th[role=columnheader]:not(.no-sort) {
     cursor: pointer;
     -webkit-user-select: none;
