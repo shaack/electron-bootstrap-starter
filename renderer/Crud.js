@@ -119,7 +119,6 @@ class EditDialog extends BootstrapModal {
     }
 
     renderSelectOptions(options, value) {
-        console.log(options, value)
         let optionsHtml = "<option value=''></option>"
         let i=1;
         for (const option of options) {

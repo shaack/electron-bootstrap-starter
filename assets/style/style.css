@@ -51,7 +51,7 @@ table.crud {
   /* line 49, style.scss */
   table.crud th, table.crud td {
     padding: 2px 10px 2px 10px;
-    border: 1px solid #999; }
+    border: 1px solid #ccc; }
   /* line 55, style.scss */
   table.crud td.currency, table.crud td.integer {
     text-align: right; }

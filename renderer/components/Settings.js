@@ -11,7 +11,9 @@ module.exports = class Settings extends (require("../Component")) {
         }
         Events.delegate(document.body, "click", "#settingsForm #storageFolder", () => {
             const value = this.renderer.settings.dataStorageFolder
-            const newValue = dialog.showOpenDialog({defaultPath: value, properties: ['openDirectory', 'createDirectory']})[0]
+            const result = dialog.showOpenDialog({defaultPath: value, properties: ['openDirectory', 'createDirectory']})
+            let newValue
+            if(result) newValue = result[0]
             if(newValue && newValue !== value) {
                 document.getElementById("storageFolder").value = newValue
                 document.getElementById("settingsSubmitButton").disabled = false
