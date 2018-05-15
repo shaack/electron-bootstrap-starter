@@ -16,12 +16,14 @@ class EditDialog extends BootstrapModal {
             let values = this.readFormValues()
             storage.get(this.componentName, (error, data) => {
                 if (error) throw error
-                delete data[values.id]
-                storage.set(this.componentName, data, (error) => {
-                    if (error) throw error
-                    renderer.getComponent().redraw()
-                    this.hide()
-                })
+                if(confirm("Delete?")) {
+                    delete data[values.id]
+                    storage.set(this.componentName, data, (error) => {
+                        if (error) throw error
+                        renderer.getComponent().redraw()
+                        this.hide()
+                    })
+                }
             })
         })
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-save", (event) => {
