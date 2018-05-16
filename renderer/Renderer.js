@@ -23,14 +23,16 @@ exports.Renderer = class Renderer {
         Observe.property(this.status, "activeComponentName", (params) => {
             if (params.oldValue !== params.newValue) {
                 const newNavItem = this.navElement.querySelector("[data-component='" + params.newValue + "']")
-                newNavItem.setAttribute("class", "nav-item active")
-                if (params.oldValue) {
-                    const oldNavItem = this.navElement.querySelector("[data-component='" + params.oldValue + "']")
-                    oldNavItem.setAttribute("class", "nav-item")
-                    this.components[params.oldValue].onHide()
+                if(newNavItem) {
+                    newNavItem.setAttribute("class", "nav-item active")
+                    if (params.oldValue) {
+                        const oldNavItem = this.navElement.querySelector("[data-component='" + params.oldValue + "']")
+                        oldNavItem.setAttribute("class", "nav-item")
+                        this.components[params.oldValue].onHide()
+                    }
+                    this.mainElement.setAttribute("class", "container-fluid " + this.status.activeComponentName)
+                    this.getComponent().onShow()
                 }
-                this.mainElement.setAttribute("class", "container-fluid " + this.status.activeComponentName)
-                this.getComponent().onShow()
             }
             localStorage.setItem("activeComponentName", this.status.activeComponentName)
         })

@@ -96,8 +96,10 @@ class EditDialog extends BootstrapModal {
     renderForm(fields, data) {
         let fieldsHTML = ""
         this.fields = fields
+        console.log("fields", fields)
         for (const field in fields) {
             const fieldConfig = fields[field]
+            console.log(data, field)
             const fieldData = data[field] || ""
             fieldsHTML += this.renderFormGroup(field, fieldConfig, fieldData)
         }
@@ -119,6 +121,9 @@ class EditDialog extends BootstrapModal {
         switch (fieldConfig.type) {
             case "text":
                 inputHtml = `<input id="${fieldId}" data-field="${name}" type="text" class="form-control form-control-details" value="${value}"/>`
+                break
+            case "textarea":
+                inputHtml = `<textarea id="${fieldId}" data-field="${name}" type="text" class="form-control form-control-details" >${value}</textarea>`
                 break
             case "integer":
                 inputHtml = `<input id="${fieldId}" data-field="${name}" type="number" class="form-control form-control-details" value="${value}"/>`
@@ -159,15 +164,19 @@ module.exports = class Crud extends (require("./Component")) {
         super(componentName, renderer)
         this.currencyFormat = new Intl.NumberFormat(renderer.locale, {minimumFractionDigits: 2, maximumFractionDigits: 2})
         this.intFormat = new Intl.NumberFormat(renderer.locale)
+        let dialogCss = "dialog" + componentName
+        if(this.config.dialogCss) {
+            dialogCss += " " + this.config.dialogCss
+        }
         this.editDialog = new EditDialog({
-            dialogCss: "dialog" + componentName
+            dialogCss: dialogCss
         }, componentName, renderer, this)
-        Events.delegate(document.body, "click", "main .btn-add", () => {
+        Events.delegate(document.body, "click", `main.${this.componentName} .btn-add`, () => {
             if (this.isActive()) {
                 this.showDetails()
             }
         })
-        Events.delegate(document.body, "click", "main table.crud tr.table-row", (event) => {
+        Events.delegate(document.body, "click", `main.${this.componentName} table.crud tr.table-row`, (event) => {
             const id = event.target.parentNode.getAttribute("data-id")
             if (id) {
                 this.showDetails(id)
