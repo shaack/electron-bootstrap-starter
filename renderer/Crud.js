@@ -8,9 +8,20 @@ const tablesort = require("tablesort")
 
 class EditDialog extends BootstrapModal {
 
-    constructor(config, componentName, renderer) {
+    constructor(config, componentName, renderer, crudComponent) {
         super(config)
         this.componentName = componentName
+        this.crudComponent = crudComponent
+
+        // TODO detect value change
+        Events.delegate(document.body, "input", ".dialog" + this.componentName + "  .form-control-details", (event) => {
+            const fieldName = event.target.getAttribute("data-field")
+            const fieldConfig = crudComponent.config.fields[fieldName]
+            if(fieldConfig.onChange) {
+                fieldConfig.onChange(this, event)
+            }
+        })
+
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-delete", (event) => {
             event.preventDefault()
             let values = this.readFormValues()
@@ -96,16 +107,16 @@ class EditDialog extends BootstrapModal {
         const fieldId = Html.toId("input_" + name)
         switch (fieldConfig.type) {
             case "text":
-                inputHtml = `<input id="${fieldId}" type="text" class="form-control" value="${value}"/>`
+                inputHtml = `<input id="${fieldId}" data-field="${name}" type="text" class="form-control form-control-details" value="${value}"/>`
                 break
             case "integer":
-                inputHtml = `<input id="${fieldId}" type="number" class="form-control" value="${value}"/>`
+                inputHtml = `<input id="${fieldId}" data-field="${name}" type="number" class="form-control form-control-details" value="${value}"/>`
                 break
             case "currency":
-                inputHtml = `<input id="${fieldId}" type="number" data-decimals="2" class="form-control" value="${value}" step="0.01"/>`
+                inputHtml = `<input id="${fieldId}" data-field="${name}" type="number" data-decimals="2" class="form-control form-control-details" value="${value}" step="0.01"/>`
                 break
             case "select":
-                inputHtml = `<select id="${fieldId}" class="form-control">${this.renderSelectOptions(fieldConfig.options, value)}</select>`
+                inputHtml = `<select id="${fieldId}" data-field="${name}" class="form-control form-control-details">${this.renderSelectOptions(fieldConfig.options, value)}</select>`
                 break
             default:
                 console.error(`unknown field type: ${fieldConfig.type}`)
@@ -120,7 +131,7 @@ class EditDialog extends BootstrapModal {
 
     renderSelectOptions(options, value) {
         let optionsHtml = "<option value=''></option>"
-        let i=1;
+        let i = 1
         for (const option of options) {
             const selected = (parseInt(value, 10) === i) ? "selected" : ""
             optionsHtml += `<option value="${i}" ${selected}>${option}</option>`
@@ -139,7 +150,7 @@ module.exports = class Crud extends (require("./Component")) {
         this.intFormat = new Intl.NumberFormat(renderer.locale)
         this.editDialog = new EditDialog({
             dialogCss: "dialog" + componentName
-        }, componentName, renderer)
+        }, componentName, renderer, this)
         Events.delegate(document.body, "click", "main .btn-add", () => {
             if (this.isActive()) {
                 this.showDetails()
@@ -192,7 +203,7 @@ module.exports = class Crud extends (require("./Component")) {
                 let rowHTML = ""
                 for (const listColumnField of this.config.list) {
                     const fieldConfig = this.config.fields[listColumnField]
-                    switch(fieldConfig.type) {
+                    switch (fieldConfig.type) {
                         case "currency":
                             rowHTML += "<td class='currency'>" + this.currencyFormat.format(row[listColumnField]) + "</td>"
                             break

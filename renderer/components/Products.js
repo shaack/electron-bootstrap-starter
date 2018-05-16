@@ -14,15 +14,15 @@ module.exports = class Products extends (require("../Crud")) {
         }
     }
 
-    changeVat(data) {
-        return data
+    changeVat(dialog, event) {
+        console.log("changeVat", dialog, event)
     }
 
-    changePriceGross(data) {
-        return data
+    changePriceGross(dialog, event) {
+        console.log("changePriceGross", dialog, event)
     }
 
-    changePriceNet(data) {
-        return data
+    changePriceNet(dialog, event) {
+        console.log("changePriceNet", dialog, event)
     }
 }
