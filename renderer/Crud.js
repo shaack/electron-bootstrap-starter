@@ -13,11 +13,10 @@ class EditDialog extends BootstrapModal {
         this.componentName = componentName
         this.crudComponent = crudComponent
 
-        // TODO detect value change
         Events.delegate(document.body, "input", ".dialog" + this.componentName + "  .form-control-details", (event) => {
             const fieldName = event.target.getAttribute("data-field")
-            const fieldConfig = crudComponent.config.fields[fieldName]
-            if(fieldConfig.onChange) {
+            const fieldConfig = this.crudComponent.config.fields[fieldName]
+            if (fieldConfig.onChange) {
                 fieldConfig.onChange(this, event)
             }
         })
@@ -37,6 +36,7 @@ class EditDialog extends BootstrapModal {
                 }
             })
         })
+
         Events.delegate(document.body, "click", ".dialog" + this.componentName + " .btn-save", (event) => {
             event.preventDefault()
             let values = this.readFormValues()
@@ -56,6 +56,17 @@ class EditDialog extends BootstrapModal {
                 })
             })
         })
+
+    }
+
+    updateFormValue(field, newValue) {
+        const fieldElement = document.getElementById(Html.toId("input_" + field))
+        if(fieldElement.setValue) {
+            fieldElement.setValue(newValue)
+        } else {
+            fieldElement.value = newValue
+        }
+
     }
 
     readFormValues() {
@@ -146,7 +157,7 @@ module.exports = class Crud extends (require("./Component")) {
 
     constructor(componentName, renderer) {
         super(componentName, renderer)
-        this.currencyFormat = new Intl.NumberFormat(renderer.locale, {minimumFractionDigits: 2})
+        this.currencyFormat = new Intl.NumberFormat(renderer.locale, {minimumFractionDigits: 2, maximumFractionDigits: 2})
         this.intFormat = new Intl.NumberFormat(renderer.locale)
         this.editDialog = new EditDialog({
             dialogCss: "dialog" + componentName
