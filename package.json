@@ -21,10 +21,10 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "bootstrap": "^4.3.1",
-    "bootstrap-input-spinner": "^1.10.16",
+    "bootstrap-input-spinner": "^1.11.4",
     "electron-json-storage": "^4.1.6",
-    "jquery": "^3.3.1",
-    "popper.js": "^1.14.7",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0",
     "tablesort": "^5.1.0"
   }
 }
